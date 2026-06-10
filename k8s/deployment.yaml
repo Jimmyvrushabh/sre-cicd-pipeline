@@ -1,52 +1,5 @@
 python3 -c "
-content = '''apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: python-app
-  labels:
-    app: python-app
-spec:
-  replicas: 3
-  selector:
-    matchLabels:
-      app: python-app
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 1
-      maxUnavailable: 0
-  template:
-    metadata:
-      labels:
-        app: python-app
-    spec:
-      containers:
-        - name: python-app
-          image: IMAGE_PLACEHOLDER
-          imagePullPolicy: IfNotPresent
-          ports:
-            - containerPort: 5000
-          readinessProbe:
-            httpGet:
-              path: /
-              port: 5000
-            initialDelaySeconds: 5
-            periodSeconds: 5
-          livenessProbe:
-            httpGet:
-              path: /
-              port: 5000
-            initialDelaySeconds: 15
-            periodSeconds: 10
-          resources:
-            requests:
-              memory: \"64Mi\"
-              cpu: \"100m\"
-            limits:
-              memory: \"128Mi\"
-              cpu: \"200m\"
-'''
-with open('k8s/deployment.yaml', 'w') as f:
-    f.write(content)
+content = 'apiVersion: apps/v1\nkind: Deployment\nmetadata:\n  name: python-app\n  labels:\n    app: python-app\nspec:\n  replicas: 3\n  selector:\n    matchLabels:\n      app: python-app\n  strategy:\n    type: RollingUpdate\n    rollingUpdate:\n      maxSurge: 1\n      maxUnavailable: 0\n  template:\n    metadata:\n      labels:\n        app: python-app\n    spec:\n      containers:\n        - name: python-app\n          image: IMAGE_PLACEHOLDER\n          imagePullPolicy: IfNotPresent\n          ports:\n            - containerPort: 5000\n          readinessProbe:\n            httpGet:\n              path: /\n              port: 5000\n            initialDelaySeconds: 5\n            periodSeconds: 5\n          livenessProbe:\n            httpGet:\n              path: /\n              port: 5000\n            initialDelaySeconds: 15\n            periodSeconds: 10\n          resources:\n            requests:\n              memory: \"64Mi\"\n              cpu: \"100m\"\n            limits:\n              memory: \"128Mi\"\n              cpu: \"200m\"\n'
+open('k8s/deployment.yaml', 'w').write(content)
 print('Done')
 "
