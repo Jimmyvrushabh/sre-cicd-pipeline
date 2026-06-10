@@ -1,5 +1,3 @@
-mkdir -p ~/sre-cicd-pipeline/k8s
-cat > ~/sre-cicd-pipeline/k8s/deployment.yaml << 'EOF'
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -23,7 +21,7 @@ spec:
     spec:
       containers:
         - name: python-app
-          image: IMAGE_PLACEHOLDER
+          image: sre-python-app:v1
           ports:
             - containerPort: 5000
           readinessProbe:
@@ -45,5 +43,3 @@ spec:
             limits:
               memory: "128Mi"
               cpu: "200m"
-EOF
-
