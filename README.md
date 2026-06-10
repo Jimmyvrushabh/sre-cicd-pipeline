@@ -18,3 +18,4 @@ webhook testfff
 webhook test
 webhook test
 webhook test
+auto trigger
