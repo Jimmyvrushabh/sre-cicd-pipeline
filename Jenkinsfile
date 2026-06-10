@@ -122,7 +122,7 @@ pipeline {
                 sh '''
                     # Replace IMAGE_PLACEHOLDER with real image:tag
                     sed "s|IMAGE_PLACEHOLDER|${IMAGE_NAME}:${IMAGE_TAG}|g" \
-                        k8s/deployment.yaml | kubectl apply -f -
+                        k8s/deploy.yaml | kubectl apply -f -
 
                     # Apply service
                     kubectl apply -f k8s/service.yaml
