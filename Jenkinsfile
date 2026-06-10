@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME    = "vrushabhc22/sre-python-app"
+        IMAGE_NAME    = "jimmy229/sre-python-app"
         IMAGE_TAG     = "${BUILD_NUMBER}"
         CONTAINER_NAME = "test-container"
         K8S_DEPLOYMENT = "python-app"
