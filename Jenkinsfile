@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = "sre-python-app"
-        IMAGE_TAG = "${BUILD_NUMBER}"
+        IMAGE_TAG  = "${BUILD_NUMBER}"
     }
 
     stages {
@@ -16,36 +16,47 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh '''
-                docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
-                '''
+                sh 'docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .'
             }
         }
 
         stage('Verify Docker Image') {
             steps {
-                sh '''
-                docker images
-                '''
+                sh 'docker images | grep ${IMAGE_NAME}'
             }
         }
 
         stage('Run Container Test') {
             steps {
                 sh '''
-                docker rm -f test-container || true
+                    # Clean up any existing container
+                    docker rm -f test-container || true
 
-                docker run -d \
-                --name test-container \
-                -p 5000:5000 \
-                ${IMAGE_NAME}:${IMAGE_TAG}
+                    # Start the container (no -p needed, we use container IP)
+                    docker run -d --name test-container ${IMAGE_NAME}:${IMAGE_TAG}
 
-                sleep 10
+                    # Get container IP directly (bypasses localhost networking issue)
+                    CONTAINER_IP=$(docker inspect -f \
+                        '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' \
+                        test-container)
 
-                curl --fail http://localhost:5000
+                    echo "Container IP: $CONTAINER_IP"
 
-                docker stop test-container
-                docker rm test-container
+                    # Retry curl up to 10 times (handles slow startup)
+                    for i in $(seq 1 10); do
+                        echo "Health check attempt $i/10..."
+                        curl --fail http://$CONTAINER_IP:5000 && echo "Health check passed!" && break
+                        sleep 3
+                    done
+                '''
+            }
+        }
+
+        stage('Tag for Registry') {
+            steps {
+                sh '''
+                    docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest
+                    echo "Tagged ${IMAGE_NAME}:${IMAGE_TAG} as latest"
                 '''
             }
         }
@@ -54,7 +65,15 @@ pipeline {
 
     post {
         always {
+            sh 'docker rm -f test-container || true'
             cleanWs()
+        }
+        success {
+            echo "Pipeline passed! Image: ${IMAGE_NAME}:${IMAGE_TAG}"
+        }
+        failure {
+            echo "Pipeline failed! Check logs above."
+            sh 'docker logs test-container || true'
         }
     }
 }
