@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: python-app
-          image: sre-python-app:v1
+          image: IMAGE_PLACEHOLDER
           ports:
             - containerPort: 5000
           readinessProbe:
