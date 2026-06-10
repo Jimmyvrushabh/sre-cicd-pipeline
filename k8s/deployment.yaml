@@ -1,4 +1,5 @@
-apiVersion: apps/v1
+python3 -c "
+content = '''apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: python-app
@@ -22,6 +23,7 @@ spec:
       containers:
         - name: python-app
           image: IMAGE_PLACEHOLDER
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5000
           readinessProbe:
@@ -38,8 +40,13 @@ spec:
             periodSeconds: 10
           resources:
             requests:
-              memory: "64Mi"
-              cpu: "100m"
+              memory: \"64Mi\"
+              cpu: \"100m\"
             limits:
-              memory: "128Mi"
-              cpu: "200m"
+              memory: \"128Mi\"
+              cpu: \"200m\"
+'''
+with open('k8s/deployment.yaml', 'w') as f:
+    f.write(content)
+print('Done')
+"
