@@ -58,7 +58,7 @@ pipeline {
                     # Retry health check 10 times
                     for i in $(seq 1 10); do
                         echo "Health check attempt $i/10..."
-                        if curl --fail --silent http://$CONTAINER_IP:5000; then
+                        if curl --fail --silent http://$CONTAINER_IP:5000/health; then
                             echo "Health check passed!"
                             exit 0
                         fi
