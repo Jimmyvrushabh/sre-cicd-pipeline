@@ -18,7 +18,7 @@
 - [Monitoring](#monitoring)
 - [API Endpoints](#api-endpoints)
 - [Problems Solved](#problems-solved)
-- [Screenshots](#screenshots)
+  
 
 ---
 
