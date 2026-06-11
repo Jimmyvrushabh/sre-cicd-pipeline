@@ -1,4 +1,4 @@
-<img width="136" height="729" alt="webhook" src="https://github.com/user-attachments/assets/1f6354a8-a50b-4ec5-b901-96e2b6ddb1d7" />
+
 # SRE CI/CD Pipeline
 # 🚀 SRE CI/CD Pipeline
 
