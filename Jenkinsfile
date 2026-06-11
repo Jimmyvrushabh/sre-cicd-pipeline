@@ -7,6 +7,7 @@ pipeline {
         CONTAINER_NAME = "test-container"
         K8S_DEPLOYMENT = "python-app"
         K8S_NAMESPACE  = "default"
+        KUBECONFIG     = "/var/jenkins_home/.kube/config"
     }
 
     stages {
